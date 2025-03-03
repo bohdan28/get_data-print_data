@@ -1,13 +1,10 @@
-from flask import Flask
-from datafetchers import PopulationDataFetcher
+from source.dataservices import CountryDataService
+from source.settings import db_name, user, password, host, port
 
-app = Flask(__name__)
+if __name__ == "__main__":
+    service = CountryDataService(db_name, user, password, host, port)
 
-@app.route('/')
-def print_data():
-    fetcher = PopulationDataFetcher('postgres', 'postgres', 'postgres')
-    df = fetcher.fetch_population_data()
-    return df.to_html()
+    df = service.get_population_data()
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    if df is not None:
+        print(df.to_string())

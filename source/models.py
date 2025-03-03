@@ -1,8 +1,11 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from source.settings import db_name, user, password, host, port
+
 
 class Base(DeclarativeBase):
     pass
+
 
 class Country(Base):
     __tablename__ = "countries"
@@ -18,8 +21,6 @@ class Country(Base):
     def __repr__(self) -> str:
         return f"<Country(id={self.id}, country={self.country}, population_2022={self.population_2022}, population_2023={self.population_2023}, change_percent={self.change_percent}, region={self.region}, subregion={self.subregion})>"
 
-# database connection
-db_url = f"postgresql://postgres:postgres@db:5432/postgres"
-engine = create_engine(db_url, echo=True)
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine)
+
+db_url = f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
+engine = create_engine(db_url)

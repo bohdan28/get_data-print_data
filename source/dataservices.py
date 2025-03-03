@@ -1,13 +1,13 @@
-import sqlalchemy
 import pandas as pd
 from sqlalchemy import create_engine
 
-class PopulationDataFetcher:
+
+class CountryDataService:
     def __init__(self, db_name, user, password, host='db', port=5432):
         self.db_url = f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
         self.engine = create_engine(self.db_url)
-    
-    def fetch_population_data(self):
+
+    def get_population_data(self):
         """Executes the SQL query."""
         query = """
             WITH RankedCountries AS (
@@ -26,7 +26,7 @@ class PopulationDataFetcher:
             FROM RankedCountries
             GROUP BY region;
         """
-        
+
         try:
             with self.engine.connect() as connection:
                 df = pd.read_sql(query, connection)
